@@ -1,5 +1,2 @@
-# mirai-console-plugin-template
-
-[Mirai Console](https://github.com/mamoe/mirai-console) 插件模板, 使用 Kotlin + Gradle.
-
-[如何使用](https://github.com/project-mirai/how-to-use-plugin-template)
+# Fliby 魔法少女
+为了保证**问答**这一最核心功能的稳定性，玄学功能（今日人品、今日老婆、今日单抽等）在这里写。
