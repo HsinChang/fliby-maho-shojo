@@ -13,11 +13,11 @@ import java.security.NoSuchAlgorithmException;
 public class DailyHash extends SimpleListenerHost {
     private ListeningStatus onEvent(GroupMessageEvent event) throws Exception {
         String s = event.getMessage().contentToString();
-        if (s.contains("今日人品")){
+        if (s.equals("今日人品")){
             MessageDigest digest = MessageDigest.getInstance("MD5");
             MessageChain msg = new At(event.getSender().getId()).plus("今天的人品是").plus("0");
             event.getGroup().sendMessage(msg);
-        } else if (s.contains("今日老婆")){
+        } else if (s.equals("今日老婆")){
             MessageDigest digest = MessageDigest.getInstance("MD5");
             MessageChain msg = new At(event.getSender().getId()).plus("今天的老婆是").plus("0");
             event.getGroup().sendMessage(msg);

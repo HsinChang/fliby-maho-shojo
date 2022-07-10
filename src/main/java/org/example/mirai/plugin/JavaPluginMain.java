@@ -8,6 +8,14 @@ import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.mamoe.mirai.message.data.At;
+import net.mamoe.mirai.message.data.MessageChain;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -35,20 +43,53 @@ public final class JavaPluginMain extends JavaPlugin {
                 .author("ポッチャマ")
                 .build());
     }
+/**
+ *计算人品的哈希函数
+ *qq就是QQ号，Mirai监听到的是long
+ *range就是期望这个每日哈希随机数的上限
+ */
+    private int getDailyHash(long qq, int range) throws NoSuchAlgorithmException{
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        String ts = qq + new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        byte[] encodeHash = digest.digest(ts.getBytes());
+        char[] hexTempHash = new char[2*encodeHash.length];
+        for (int j = 0; j < encodeHash.length; j++) {
+            int v = encodeHash[j] & 0xFF;
+            hexTempHash[j * 2] =  hexArray[v >>> 4];
+            hexTempHash[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        String hexHash = new String(hexTempHash).replaceAll("\\D+", "").substring(0,5);
+        Integer intHash = Integer.parseInt(hexHash);
+        return intHash%range;
+    }
 
     @Override
     public void onEnable() {
         getLogger().info("日志");
         EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
-        eventChannel.registerListenerHost(new DailyHash());
+//        eventChannel.registerListenerHost(new DailyHash());
         eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {
             //监听群消息
-            getLogger().info(g.getMessage().contentToString());
-
+//            getLogger().info(g.getMessage().contentToString());
+            String s = g.getMessage().contentToString();
+            if (s.equals("今日人品")){
+                MessageChain msg = null;
+                try {
+                    msg = new At(g.getSender().getId()).plus("今天的人品是").plus(Integer.toString(getDailyHash(g.getSender().getId(),101))).plus("!");
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
+                g.getGroup().sendMessage(msg);
+            } else if (s.equals("今日老婆")){
+                MessageChain msg = new At(g.getSender().getId()).plus("今天的老婆是").plus("0").plus("!");
+                g.getGroup().sendMessage(msg);
+            }
         });
         eventChannel.subscribeAlways(FriendMessageEvent.class, f -> {
             //监听好友消息
             getLogger().info(f.getMessage().contentToString());
         });
     }
+
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 }
