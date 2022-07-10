@@ -29,8 +29,10 @@ import net.mamoe.mirai.event.events.GroupMessageEvent;
 public final class JavaPluginMain extends JavaPlugin {
     public static final JavaPluginMain INSTANCE = new JavaPluginMain();
     private JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("org.example.mirai-example", "0.1.0")
-                .info("EG")
+        super(new JvmPluginDescriptionBuilder("com.fliby.mahoshojo", "0.1.0")
+                .name("Fliby Maho Shojo")
+                .info("キラキラ✨くるくる～")
+                .author("ポッチャマ")
                 .build());
     }
 
@@ -38,6 +40,7 @@ public final class JavaPluginMain extends JavaPlugin {
     public void onEnable() {
         getLogger().info("日志");
         EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
+        eventChannel.registerListenerHost(new DailyHash());
         eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {
             //监听群消息
             getLogger().info(g.getMessage().contentToString());
