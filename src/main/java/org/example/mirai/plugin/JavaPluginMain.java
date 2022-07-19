@@ -166,7 +166,12 @@ public final class JavaPluginMain extends JavaPlugin {
                     } else {
                         gacha = threeStars_68.get(getDailyHash(qq,threeStars_68.size()));
                     }
+                    String imgPath = "./icons/" + gacha + ".png";
+                    ExternalResource res = ExternalResource.create(new File(imgPath));
+                    Image image = contact.uploadImage(res);
+                    res.close();
                     msg = new At(qq).plus("你今天抽到的是「").plus(gacha).plus("」!");
+                    msg.plus(image);
                     g.getGroup().sendMessage(msg);
                 } catch (NoSuchAlgorithmException e) {
                     throw new RuntimeException(e);
