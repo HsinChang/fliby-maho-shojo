@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 public final class JavaPluginMain extends JavaPlugin {
     public static final JavaPluginMain INSTANCE = new JavaPluginMain();
     private JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("com.fliby.mahoshojo", "0.1.0")
+        super(new JvmPluginDescriptionBuilder("com.fliby.mahoshojo", "1.1.0")
                 .name("Fliby Maho Shojo")
                 .info("キラキラ✨くるくる～")
                 .author("ポッチャマ")
